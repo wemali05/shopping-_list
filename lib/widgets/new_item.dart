@@ -11,7 +11,21 @@ class NewItem extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),
-        child: const Text('Form goes here'),
+        child: Form(
+          child: Column(
+            children: [
+              TextFormField(
+                maxLength: 50,
+                decoration: const InputDecoration(
+                  label: Text('Name')
+                ),
+                validator: (value) {
+                  return 'Demo';
+                },
+              ),//instead of TextField
+            ],
+          ),
+        ),
       ),
     );
   }
