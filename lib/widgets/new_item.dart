@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/models/category.dart';
+import 'package:shopping_list/models/grocery_item.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -20,9 +21,13 @@ class _NewItemState extends State<NewItem> {
     void _saveItem() {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        print(_enteredName);
-        print(_enteredQuantity);
-        print(_selectedCategory);
+        Navigator.of(context).pop(
+          GroceryItem(
+              id: DateTime.now().toString(),
+              name: _enteredName,
+              quantity: _enteredQuantity,
+              category: _selectedCategory),
+        );
       }
     }
 
@@ -85,25 +90,24 @@ class _NewItemState extends State<NewItem> {
                       items: [
                         for (final category in categories.entries)
                           DropdownMenuItem(
-                              value: category.value,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 16,
-                                    height: 16,
-                                    color: category.value.color,
-                                  ),
-                                  const SizedBox(
-                                    width: 6,
-                                  ),
-                                  Text(category.value.title)
-                                ],
-                              )),
+                            value: category.value,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 16,
+                                  height: 16,
+                                  color: category.value.color,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(category.value.title)
+                              ],
+                            ),
+                          ),
                       ],
                       onChanged: (value) {
-                        setState(() {
+                        // setState(() {
                           _selectedCategory = value!;
-                        });
+                        // });
                       },
                     ),
                   ),
