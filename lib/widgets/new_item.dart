@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/data/categories.dart';
+import 'package:shopping_list/models/category.dart';
 
-class NewItem extends StatelessWidget {
+class NewItem extends StatefulWidget {
   const NewItem({super.key});
 
   @override
+  State<NewItem> createState() => _NewItemState();
+}
+
+class _NewItemState extends State<NewItem> {
+  @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
+    var _enteredName = '';
+    var _enteredQuantity = 1;
+    var _selectedCategory = categories[Categories.vegetables]!;
 
     void _saveItem() {
-        _formKey.currentState!.validate();
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        print(_enteredName);
+        print(_enteredQuantity);
+        print(_selectedCategory);
+      }
     }
 
     return Scaffold(
@@ -34,6 +48,9 @@ class NewItem extends StatelessWidget {
                   }
                   return null;
                 },
+                onSaved: (value) {
+                  _enteredName = value!;
+                },
               ), //instead of TextField
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -45,7 +62,7 @@ class NewItem extends StatelessWidget {
                       ),
                       initialValue: '1',
                       keyboardType: TextInputType.number,
-                      validator: (value) {   
+                      validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
                             int.tryParse(value) == null ||
@@ -54,6 +71,9 @@ class NewItem extends StatelessWidget {
                         }
                         return null;
                       },
+                      onSaved: (value) {
+                        _enteredQuantity = int.parse(value!);
+                      },
                     ),
                   ),
                   const SizedBox(
@@ -61,6 +81,7 @@ class NewItem extends StatelessWidget {
                   ),
                   Expanded(
                     child: DropdownButtonFormField(
+                      value: _selectedCategory,
                       items: [
                         for (final category in categories.entries)
                           DropdownMenuItem(
@@ -79,7 +100,11 @@ class NewItem extends StatelessWidget {
                                 ],
                               )),
                       ],
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCategory = value!;
+                        });
+                      },
                     ),
                   ),
                 ],
