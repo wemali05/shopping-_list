@@ -33,18 +33,30 @@ class _GroceryListState extends State<GroceryList> {
   Widget build(BuildContext context) {
     Widget content = const Center(child: Text('No Item added yet'));
 
+    void _removeItem(GroceryItem item) {
+      setState(() {
+        _gorceryItems.remove(item);
+      });
+    }
+
     if(_gorceryItems.isNotEmpty) {
       content = ListView.builder(
         itemCount: _gorceryItems.length,
-        itemBuilder: (ctx, index) => ListTile(
-          title: Text(_gorceryItems[index].name),
-          leading: Container(
-            height: 24,
-            width: 24,
-            color: _gorceryItems[index].category.color,
-          ),
-          trailing: Text(
-            _gorceryItems[index].quantity.toString(),
+        itemBuilder: (ctx, index) => Dismissible(
+          onDismissed: (direction) {
+            _removeItem(_gorceryItems[index]);
+          },
+          key: ValueKey(_gorceryItems[index].id),
+          child: ListTile(
+            title: Text(_gorceryItems[index].name),
+            leading: Container(
+              height: 24,
+              width: 24,
+              color: _gorceryItems[index].category.color,
+            ),
+            trailing: Text(
+              _gorceryItems[index].quantity.toString(),
+            ),
           ),
         ),
       );
