@@ -14,13 +14,13 @@ class _GroceryListState extends State<GroceryList> {
   final List<GroceryItem> _gorceryItems = [];
 
   void _addItem() async {
-    final newItem =  await Navigator.of(context).push<GroceryItem>(
+    final newItem = await Navigator.of(context).push<GroceryItem>(
       MaterialPageRoute(
         builder: (ctx) => const NewItem(),
       ),
     );
 
-    if(newItem == null) {
+    if (newItem == null) {
       return;
     }
 
@@ -31,17 +31,10 @@ class _GroceryListState extends State<GroceryList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Groceries'),
-        actions: [
-          IconButton(
-            onPressed: _addItem,
-            icon: Icon(Icons.add),
-          ),
-        ],
-      ),
-      body: ListView.builder(
+    Widget content = const Center(child: Text('No Item added yet'));
+
+    if(_gorceryItems.isNotEmpty) {
+      content = ListView.builder(
         itemCount: _gorceryItems.length,
         itemBuilder: (ctx, index) => ListTile(
           title: Text(_gorceryItems[index].name),
@@ -54,7 +47,19 @@ class _GroceryListState extends State<GroceryList> {
             _gorceryItems[index].quantity.toString(),
           ),
         ),
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Your Groceries'),
+        actions: [
+          IconButton(
+            onPressed: _addItem,
+            icon: Icon(Icons.add),
+          ),
+        ],
       ),
+      body: content,
     );
   }
 }
