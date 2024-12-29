@@ -6,6 +6,12 @@ class NewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
+    void _saveItem() {
+        _formKey.currentState!.validate();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Add a new item'),
@@ -13,6 +19,7 @@ class NewItem extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               TextFormField(
@@ -37,6 +44,7 @@ class NewItem extends StatelessWidget {
                         label: Text('Quantity'),
                       ),
                       initialValue: '1',
+                      keyboardType: TextInputType.number,
                       validator: (value) {   
                         if (value == null ||
                             value.isEmpty ||
@@ -83,11 +91,13 @@ class NewItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _formKey.currentState!.reset();
+                    },
                     child: const Text('Reset'),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _saveItem,
                     child: const Text('Add Item'),
                   ),
                 ],
