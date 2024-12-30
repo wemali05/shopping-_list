@@ -16,6 +16,7 @@ class GroceryList extends StatefulWidget {
 
 class _GroceryListState extends State<GroceryList> {
   List<GroceryItem> _gorceryItems = [];
+  var _isLoading = true;
 
   @override
   void initState() {
@@ -47,6 +48,7 @@ class _GroceryListState extends State<GroceryList> {
 
     setState(() {
       _gorceryItems = loadItems;
+      _isLoading = false;
     });
   }
 
@@ -66,14 +68,20 @@ class _GroceryListState extends State<GroceryList> {
     });
   }
 
+  void _removeItem(GroceryItem item) {
+    setState(() {
+      _gorceryItems.remove(item);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget content = const Center(child: Text('No Item added yet'));
 
-    void _removeItem(GroceryItem item) {
-      setState(() {
-        _gorceryItems.remove(item);
-      });
+    if (_isLoading) {
+      content = Center(
+        child: CircularProgressIndicator(),
+      );
     }
 
     if (_gorceryItems.isNotEmpty) {
@@ -98,6 +106,7 @@ class _GroceryListState extends State<GroceryList> {
         ),
       );
     }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Groceries'),
